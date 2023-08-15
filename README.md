@@ -81,7 +81,7 @@ Here is the `.csproj` file for the generator project:
 </Project>
 ```
 
-> 💡 Note that while the documentation mentions that the project needs to target `netstandard2.0`, it means that .NET 5 and above target will work.
+> 💡 Note that [while the documentation mentions](https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/source-generators-overview#get-started-with-source-generators) that the project needs to target `netstandard2.0`, it means that any .NET 5 and above target will also work.
 
 We need to add two references:
 
@@ -206,7 +206,7 @@ await orders.Update(new());
 
 This is incredibly handy and has many use cases!  But if we only needed the basic, common CRUD operations, a generic `Repository<T>` would have been sufficient.  The purpose of creating a strongly typed instance is to provide a well-encapsulated place to organize model-specific operations.
 
-For example, what if we want to implement an operation on `Order` like `UpdateIfNotShipped`?  Because we're using partial classes, we can easily extend our generated repositories:
+For example, what if we want to implement an operation on `Order` like `UpdateIfNotShipped`?  Because we're using [partial classes](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/partial-classes-and-methods), we can easily extend our generated repositories:
 
 ```cs
 /// <summary>
