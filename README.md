@@ -14,7 +14,7 @@ However, because of the limitations of document-oriented databases, complex oper
 
 This approach allows us to extend `Order` specific operations in a well encapsulated manner and in fact, it would be nice if we had an entity specific repository for each entity type in our domain space.
 
-As the number of entity types increases, this can easily become tedious!  With Roslyn source generators, we can automate this while still retaining flexibility.
+As the number of entity types increases, this can easily become tedious! With Roslyn-powered .NET source generators, we can automate away this tedium this while still retaining flexibility.
 
 ## The Domain Space
 
