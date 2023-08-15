@@ -307,3 +307,12 @@ This should clear the cache if you are observing that your generated code isn't 
 .NET source generators are a powerful platform capability that can be harnessed to reduce a lot of boilerplate code while still providing strongly-typed access.  For performance sensitive use cases where .NET native ahead-of-time compilation (AOT) can decrease startup times, using source generators instead of reflection is a necessary technique.
 
 It's one of the many reasons that the .NET ecosystem is one of the best for building and delivering complex, high performance applications.
+
+## Resources
+
+- https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/source-generators-overview
+- https://wengier.com/SourceGeneratorPlayground/
+- https://blog.devops.dev/net-source-generator-way-to-improve-performance-3a03bca7c6d
+- https://khalidabuhakmeh.com/dotnet-source-generators-finding-class-declarations
+- https://github.com/amis92/csharp-source-generators
+- https://learn.microsoft.com/en-us/answers/questions/1184090/looking-for-assistance-clearing-the-cache-for-upda
