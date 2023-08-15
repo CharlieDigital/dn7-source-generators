@@ -4,7 +4,7 @@
 
 Aside from the release of LINQ and `System.Linq.Expressions` to support it, source generators are one of the key .NET platform meta-features.
 
-In this exercise, we'll explore source generators in the context of building a data access layer that allows us to dramatically reduce some of the more tedious, boiler-plate work of building a data access layer.
+In this exercise, we'll explore source generators in the context of building a data access layer that allows us to dramatically reduce some of the more tedious, boiler-plate involved.
 
 ## Problem Outline
 
@@ -180,7 +180,7 @@ For our domain space, this will generate classes like:
 
 ```cs
 public partial class OrderRepository : RepositoryBase<Order> { };
-public partial class UserRepository : RepositoryBase<Order> { };
+public partial class UserRepository : RepositoryBase<User> { };
 ```
 
 Take note that we've declared these as `partial` classes; we'll explore this in a bit.
