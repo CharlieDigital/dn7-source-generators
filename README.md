@@ -2,7 +2,7 @@
 
 .NET source generators provide a framework level utility to dynamically generate source code.  Whether that's whole classes, individual functions (using C# partial classes), or strongly-typed runtime bindings.
 
-Aside from the release of LINQ and `System.Linq.Expressions` to support the it, source generators are one of the key .NET platform meta-features.
+Aside from the release of LINQ and `System.Linq.Expressions` to support it, source generators are one of the key .NET platform meta-features.
 
 In this exercise, we'll explore source generators in the context of building a data access layer that allows us to dramatically reduce some of the more tedious, boiler-plate work of building a data access layer.
 
