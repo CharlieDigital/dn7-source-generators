@@ -108,6 +108,7 @@ Here is the `.csproj` file for the generator project:
 We need to add two references:
 
 ```shell
+cd generator
 dotnet add package Microsoft.CodeAnalysis.CSharp
 dotnet add package Microsoft.CodeAnalysis.Analyzers
 ```
@@ -289,6 +290,8 @@ Our local, partial class allows us to extend the generated model as well.
 You may run into issues with caching while developing your own generators.  To work around this, you can use the `build-server shutdown` command to effectively restart the build server:
 
 ```shell
+cd runtime
+
 # Reset the build server to clear cache.
 dotnet build-server shutdown
 dotnet run
