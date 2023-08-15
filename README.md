@@ -179,8 +179,8 @@ public partial class {modelClass}Repository : RepositoryBase<{modelClass}> {{ }}
 For our domain space, this will generate classes like:
 
 ```cs
-public partial class OrderRepository : RepositoryBase<Order> { }";
-public partial class UserRepository : RepositoryBase<Order> { }";
+public partial class OrderRepository : RepositoryBase<Order> { };
+public partial class UserRepository : RepositoryBase<Order> { };
 ```
 
 Take note that we've declared these as `partial` classes; we'll explore this in a bit.
