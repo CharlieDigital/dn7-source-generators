@@ -81,10 +81,12 @@ Here is the `.csproj` file for the generator project:
 </Project>
 ```
 
+> 💡 Note that while the documentation mentions that the project needs to target `netstandard2.0`, it means that .NET 5 and above target will work.
+
 We need to add two references:
 
 ```shell
-dotnet add package Microsoft.CodeAnalysis.Analyzers
+dotnet add package Microsoft.CodeAnalysis.CSharp
 dotnet add package Microsoft.CodeAnalysis.Analyzers
 ```
 
