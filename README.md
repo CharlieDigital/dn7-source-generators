@@ -59,6 +59,28 @@ Given this `IRepository<T>` contract, the `RepositoryBase<T>` class can cover mo
 
 To work around this, we can leverage .NET source generators to create the entity repositories for us!
 
+To get started, we'll create two projects:
+
+1. `runtime` - this is our application runtime where our own code goes and where we'll have the base definition of our domain model and data access layer.
+2. `generator` - this is where we'll place our code generator.
+
+If you're following along with VS Code:
+
+```shell
+mkdir dn7-src-gen
+cd dn7-src-gen
+dotnet add sln            # Create the solution file
+mkdir generator
+mkdir runtime
+cd generator
+dotnet new classlib      # Class library project type for the generator
+cd ../runtime
+dotnet new console       # Console project type for our runtime app
+cd ../
+dotnet sln add runtime
+dotnet sln add generator
+```
+
 ## Creating the Generator
 
 When creating a generator, you'll want to create a separate project to be referenced by your main project.
