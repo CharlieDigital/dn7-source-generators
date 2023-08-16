@@ -1,4 +1,4 @@
-namespace runtime;
+namespace runtime.models;
 
 /// <summary>
 /// A partial class that extends the generated class.

@@ -9,7 +9,7 @@ namespace generator {
   /// Here, we'll capture a list of models that implement Entity.
   /// </summary>
   public class RepoSyntaxReceiver : ISyntaxContextReceiver {
-    public List<string> Models = new();
+    public List<(string Namespace, string ClassName)> Models = new();
 
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context) {
       if (context.Node is not ClassDeclarationSyntax classDec
@@ -18,7 +18,10 @@ namespace generator {
       }
 
       if (classDec.BaseList.Types.Any(t => t.ToString() == "Entity")) {
-        Models.Add(classDec.Identifier.ToString());
+        Models.Add((
+          (classDec.Parent as FileScopedNamespaceDeclarationSyntax).Name.ToFullString(),
+          classDec.Identifier.ToString())
+        );
       }
     }
   }
@@ -43,14 +46,14 @@ namespace generator {
 
       foreach (var modelClass in models) {
         var src = $@"
-using System;
+namespace {modelClass.Namespace};
 
-namespace runtime;
-
-public partial class {modelClass}Repository : RepositoryBase<{modelClass}> {{
-
+public partial class {modelClass.ClassName}Repository : RepositoryBase<{modelClass.ClassName}> {{
+  public void Test() {{
+    Console.WriteLine(""{modelClass.Namespace}"");
+  }}
 }}";
-        context.AddSource($"{modelClass}Repository.g.cs", src);
+        context.AddSource($"{modelClass.ClassName}Repository.g.cs", src);
       }
     }
 

@@ -1,4 +1,4 @@
-namespace runtime;
+namespace runtime.models;
 
 public interface IRepository<T> where T: Entity {
   Task Add(T Entity);
@@ -37,3 +37,5 @@ public class User : Entity {
 public class Order : Entity {
 
 }
+
+public class Product : Entity {}

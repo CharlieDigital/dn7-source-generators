@@ -1,10 +1,16 @@
 # .NET Source Generators with .NET 7
 
-.NET source generators provide a framework level utility to dynamically generate source code.  Whether that's whole classes, individual functions (using C# partial classes), or strongly-typed runtime bindings.
+.NET source generators provide a framework level utility to dynamically generate source code both at _dev time and build time_. Whether that’s whole classes, individual functions (using C# partial classes), or strongly-typed runtime bindings.
+
+To better understand what this means, check out this capture below; when I add the `Product` entity class, the `ProductRepository` type _is created automatically by the generator_:
+
+![Adding entity adds repository type](media/generate-code-2.gif)
+
+There is no `ProductRepository.cs`; this purely generated class is detected by the language server (for autocomplete) and gets added to the source tree at build time for static type checking, _but generates no actual file and requires no additional work_ except to declare the `Product` type!
 
 Aside from the release of LINQ and `System.Linq.Expressions` to support it, source generators are one of the key .NET platform meta-features.
 
-In this exercise, we'll explore source generators in the context of building a data access layer that allows us to dramatically reduce some of the more tedious, boiler-plate involved.
+In this exercise, we'll explore source generators in the context of building a data access layer that allows us to dramatically reduce some of the more tedious, boiler-plate involved.  We’ll see how we can create a generator so that declaring an entity type automatically generates the scaffolding required to interact with that type.
 
 ## Problem Outline
 
@@ -304,7 +310,11 @@ This should clear the cache if you are observing that your generated code isn't 
 
 ## Closing Thoughts
 
-.NET source generators are a powerful platform capability that can be harnessed to reduce a lot of boilerplate code while still providing strongly-typed access.  For performance sensitive use cases where .NET native ahead-of-time compilation (AOT) can decrease startup times, using source generators instead of reflection is a necessary technique.
+.NET source generators are a powerful platform capability that can be harnessed to reduce a lot of boilerplate code while still providing strongly-typed access.
+
+For performance sensitive use cases where [.NET native ahead-of-time compilation (AOT)](https://learn.microsoft.com/en-us/dotnet/core/deploying/native-aot/?tabs=net7%2Cwindows) can decrease startup times, using source generators instead of reflection is a necessary technique.
+
+There are numerous use cases where you can take advantage of this mechanism to simplify your every day workflow.
 
 It's one of the many reasons that the .NET ecosystem is one of the best for building and delivering complex, high performance applications.
 
