@@ -33,6 +33,7 @@ var json = JsonSerializer
 if (json != null){
   Console.WriteLine($"Name: {json.Name}");
   Console.WriteLine($"Type: {json.Type}");
+  Console.WriteLine($"Address Locality: {json.Address?.AddressLocality}");
   Console.WriteLine($"BirthDate: {json.BirthDate}");
   Console.WriteLine($"Nationality: {json.Nationality}");
   Console.WriteLine($"SameAs Count: {json.SameAs.Length}");
