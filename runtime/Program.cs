@@ -1,5 +1,4 @@
-﻿using runtime;
-using runtime.models;
+﻿using runtime.models;
 
 // Fully generated
 var users = new UserRepository();
@@ -19,3 +18,8 @@ await orders.UpdateIfNotShipped(new()); // Added via partial
 
 var products = new ProductRepository();
 await products.Add(new());
+
+// Example of generating a class from a sample JSON snippet.
+var json = new SampleJsonLd();
+json.Test();
+Console.WriteLine(json.Message);
