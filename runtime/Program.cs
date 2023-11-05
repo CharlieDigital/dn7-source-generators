@@ -1,4 +1,6 @@
-﻿using runtime.models;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using runtime.models;
 
 // Fully generated
 var users = new UserRepository();
@@ -20,6 +22,18 @@ var products = new ProductRepository();
 await products.Add(new());
 
 // Example of generating a class from a sample JSON snippet.
-var json = new SampleJsonLd();
-json.Test();
-Console.WriteLine(json.Message);
+var json = JsonSerializer
+  .Deserialize<SampleJsonLd>(
+    SampleJsonLd.Json,
+    new JsonSerializerOptions() {
+      PropertyNameCaseInsensitive = true
+    }
+  );
+
+if (json != null){
+  Console.WriteLine($"Name: {json.Name}");
+  Console.WriteLine($"Type: {json.Type}");
+  Console.WriteLine($"BirthDate: {json.BirthDate}");
+  Console.WriteLine($"Nationality: {json.Nationality}");
+  Console.WriteLine($"SameAs Count: {json.SameAs.Length}");
+}
