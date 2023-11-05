@@ -326,3 +326,4 @@ It's one of the many reasons that the .NET ecosystem is one of the best for buil
 - https://khalidabuhakmeh.com/dotnet-source-generators-finding-class-declarations
 - https://github.com/amis92/csharp-source-generators
 - https://learn.microsoft.com/en-us/answers/questions/1184090/looking-for-assistance-clearing-the-cache-for-upda
+- https://turnerj.com/blog/the-pain-points-of-csharp-source-generators
