@@ -59,6 +59,7 @@ public class JsonLdGenerator : ISourceGenerator {
     var models = (context.SyntaxContextReceiver as JsonLdSyntaxReceiver).Models;
 
     foreach (var modelClass in models) {
+      var classBuffer = new StringBuilder();
       var src = new StringBuilder();
       src.AppendLine($@"
 using System.Text.Json;
@@ -74,34 +75,11 @@ public partial class {modelClass.ClassName} {{
       // Read the JSON and create properties.
       var json = JsonDocument.Parse(modelClass.Json);
 
-      var makeUpper = (string s) => {
-        s = s.Replace("@", "");
-        return $"{s[..1].ToUpper()}{s[1..]}";
-      };
-
-      foreach(var prop in json.RootElement.EnumerateObject()) {
-
-        var child = json.RootElement.GetProperty(prop.Name);
-
-        var property = child.ValueKind switch {
-          JsonValueKind.String => $"public string {makeUpper(prop.Name)} {{ get; set;}} = \"\";",
-          JsonValueKind.Number => $"public decimal {makeUpper(prop.Name)} {{ get; set; }}",
-          JsonValueKind.False => $"public bool {makeUpper(prop.Name)} {{ get; set; }}",
-          JsonValueKind.True => $"public bool {makeUpper(prop.Name)} {{ get; set; }}",
-          // JsonValueKind.Null => $"public object? {makeUpper(prop.Name)} {{ get; set; }}",
-          // JsonValueKind.Undefined => $"public object? {makeUpper(prop.Name)} {{ get; set; }}",
-          JsonValueKind.Array => ResolveArray(makeUpper(prop.Name), child),
-          _ => $"// Skip: {prop.Name}, {child.ValueKind}"
-        };
-
-        if (!property.StartsWith("//")) {
-          property = $"[JsonPropertyName(\"{prop.Name}\")] {property}";
-        }
-
-        src.AppendLine(property);
-      }
+      src.Append(ResolveObject(classBuffer, "", json.RootElement));
 
       src.AppendLine("}");
+
+      src.Append(classBuffer.ToString());
 
       context.AddSource($"{modelClass.ClassName}.g.cs", src.ToString());
     }
@@ -146,5 +124,76 @@ public partial class {modelClass.ClassName} {{
     }
 
     return src.ToString();
+  }
+
+  /// <summary>
+  /// Resolves an object from the JSON+LD
+  /// </summary>
+  /// <param name="propName">The property name</param>
+  /// <param name="element">The JSON node element to process</param>
+  /// <returns>The source and a class if the object defines a class type.</returns>
+  private string ResolveObject(
+      StringBuilder classBuffer,
+      string propName,
+      JsonElement element
+    ) {
+      var makeUpper = (string s) => {
+        s = s.Replace("@", "");
+        return $"{s[..1].ToUpper()}{s[1..]}";
+      };
+
+      var src = new StringBuilder();
+
+      var accumulateClass = "";
+
+      foreach(var prop in element.EnumerateObject()) {
+        var child = element.GetProperty(prop.Name);
+
+        var property = child.ValueKind switch {
+          JsonValueKind.String => $"public string {makeUpper(prop.Name)} {{ get; set;}} = \"\";",
+          JsonValueKind.Number => $"public decimal {makeUpper(prop.Name)} {{ get; set; }}",
+          JsonValueKind.False => $"public bool {makeUpper(prop.Name)} {{ get; set; }}",
+          JsonValueKind.True => $"public bool {makeUpper(prop.Name)} {{ get; set; }}",
+          // JsonValueKind.Null => $"public object? {makeUpper(prop.Name)} {{ get; set; }}",
+          // JsonValueKind.Undefined => $"public object? {makeUpper(prop.Name)} {{ get; set; }}",
+          JsonValueKind.Array => ResolveArray(makeUpper(prop.Name), child),
+          JsonValueKind.Object => ResolveObject(classBuffer, makeUpper(prop.Name), child),
+          _ => $"// Skip: {prop.Name}, {child.ValueKind}"
+        };
+
+        if (!property.StartsWith("//")) {
+          property = $"  [JsonPropertyName(\"{prop.Name}\")] {property}";
+        }
+
+        // Check if we need to register a class based on the discovery of a type.
+        if (!string.IsNullOrEmpty(propName) && prop.Name == "@type") {
+          classBuffer.AppendLine();
+          classBuffer.AppendLine("/// <summary>Generated class</summary>");
+          classBuffer.AppendLine(@$"public class {prop.Value} {{");
+
+          accumulateClass = prop.Value.ToString();
+        }
+
+        // We'll need to append the property to the class buffer instead since we're
+        // building up a class.  This REQUIRES that the @type is the first property.
+        // Or we can extract the enumerator to a list first.
+        if (string.IsNullOrEmpty(accumulateClass)) {
+          src.AppendLine(property);
+        } else {
+          classBuffer.AppendLine(property);
+        }
+      }
+
+      if (!string.IsNullOrEmpty(accumulateClass)) {
+        classBuffer.AppendLine("}");
+
+        // Need this to fix: "warning CS8669: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context. Auto-generated code requires an explicit '#nullable' directive in source."
+        src.AppendLine();
+        src.AppendLine("  #nullable enable");
+        src.AppendLine($"  public {accumulateClass}? {propName} {{ get; set; }}");
+        src.AppendLine("  #nullable disable");
+      }
+
+      return src.ToString();
   }
 }
